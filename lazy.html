@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lazy-loading</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <style>
+    img {
+      max-width: 100%;
+      /* 使圖片自適應容器 */
+      height: auto;
+      /* 保持高寬比 */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar"></div> <!-- 導航欄將被加載到這裡 -->
+
+
+  <div class="container mt-3">
+    <h1>Lazy-loading 懶加載圖片示例</h1>
+    <p>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" class="link-primary"
+        target="_blank">Intersection Observer API 官網</a>
+    </p>
+    <h3>範例程式碼</h3>
+    以下是使用 Intersection Observer 進行懶加載的簡單範例：
+    <pre>
+        <code>
+        const lazyImages = document.querySelectorAll('.lazy');
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = document.createElement('img');
+                    img.src = entry.target.getAttribute('data-src');
+                    img.alt = '懶加載的圖片';
+                    entry.target.appendChild(img);
+                    observer.unobserve(entry.target); // 停止監視已加載的元素
+                }
+            });
+        });
+
+        lazyImages.forEach(image => {
+            observer.observe(image); // 監視每個懶加載圖片
+        });
+      </code>
+    </pre>
+    <h3>範例展示</h3>
+    <div class="lazy" data-src="https://fakeimg.pl/300x300/?text=Hello"></div>
+    <h3>完整程式碼</h3>
+    <pre>
+      <code>
+        function generateImages(imageCount) {
+            const container = document.getElementById('image-container');
+            for (let i = 1; i <= imageCount; i++) {
+                const col = document.createElement('div');
+                col.className = 'col-4 mb-3';
+        
+                const img = document.createElement('img');
+                img.dataset.src = `http://fakeimg.pl/300x300/?text=${i}`; // 生成圖片的 URL
+                img.className = 'lazy img-fluid';
+                img.alt = `圖片 ${i}`;
+        
+                col.appendChild(img);
+                container.appendChild(col);
+            }
+        }
+        
+        function initLazyLoading() {
+            const images = document.querySelectorAll('.lazy');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src; // 將資料屬性 src 設置為 img 的 src
+                        observer.unobserve(img); // 停止觀察該圖片
+                    }
+                });
+            });
+            images.forEach(image => observer.observe(image)); // 開始監視所有圖片
+        }
+        
+        // 生成 99 張圖片並初始化懶加載
+        generateImages(99);
+        initLazyLoading();
+    </code>
+  </pre>
+    <h1 class="mt-4">動態生成圖片示例</h1>
+    <div class="row" id="image-container"></div>
+
+
+  </div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+      });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="lazy.js"></script>
+</body>
+
+</html>

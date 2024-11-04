@@ -1,0 +1,21 @@
+.animated-div {
+    width: 100%;
+    /* 寬度 100% */
+    height: 100px;
+    /* 高度 100px */
+    color: aliceblue;
+    border: 10px solid orange;
+    /* 外框 15px 橘色 */
+    background-color: #003366;
+    /* 背景顏色深藍色 */
+    margin: 20px;
+    /* 外距 3px */
+    box-sizing: border-box;
+    /* 確保 padding 和 border 包含在寬度和高度內 */
+    display: flex;
+    /* 使用 Flexbox */
+    justify-content: center;
+    /* 水平置中 */
+    align-items: center;
+    /* 垂直置中 */
+  }
